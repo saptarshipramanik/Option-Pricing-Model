@@ -94,7 +94,7 @@ if __name__ == "__main__":
     rf_str = soup.find('fin-streamer', {'data-field': 'regularMarketPrice'}).text
 
     # Clean up the extracted text to remove any unwanted characters or whitespace
-    rf_str = treasury_rate_str.replace('%', '').strip()
+    rf_str = rf_str.replace('%', '').strip()
 
     # Convert the cleaned string to a float
     rf = float(rf_str)        # risk-free rate
