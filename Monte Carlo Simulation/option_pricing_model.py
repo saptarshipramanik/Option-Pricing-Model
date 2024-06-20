@@ -4,7 +4,8 @@ import numpy as np
 from scipy.stats import norm
 import math
 import time
-
+import requests
+from bs4 import BeautifulSoup
 #  Black Scholes formula for option pricing
 
 class BlackScholes:
@@ -84,7 +85,20 @@ if __name__ == "__main__":
     S0 = 100                       # underlying stock price at t = 0
     E = 100                        # strike price
     T = 1                          # expiry
-    rf = 0.3                      # risk-free rate
+
+    # Fetch the HTML content from Yahoo Finance
+    response = requests.get('https://finance.yahoo.com/quote/^TNX')
+    soup = BeautifulSoup(response.content, 'html.parser')
+
+    # Parse the HTML to find the current US Treasury rate
+    rf_str = soup.find('fin-streamer', {'data-field': 'regularMarketPrice'}).text
+
+    # Clean up the extracted text to remove any unwanted characters or whitespace
+    rf_str = treasury_rate_str.replace('%', '').strip()
+
+    # Convert the cleaned string to a float
+    rf = float(rf_str)        # risk-free rate
+
     sigma = 0.2                   # volatility of the underlying stock
     iterations = 1000000         # number of iterations in the Monte Carlo Simulation
     
